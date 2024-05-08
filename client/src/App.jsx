@@ -128,74 +128,81 @@ function App() {
     }
   };
 
-  // Function to handle editing a post
-const handleEditPost = async (postId, updatedTitle, updatedContent) => {
-  try {
-    const response = await fetch(`http://localhost:8080/posts/${postId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title: updatedTitle, content: updatedContent, user_id: user.id }),
-    });
-    const data = await response.json();
-    console.log('Updated post:', data);
-    // Update posts state with the edited post
-    const updatedPosts = posts.map(post => (post.id === postId ? { ...post, title: updatedTitle, content: updatedContent } : post));
-    setPosts(updatedPosts);
-  } catch (error) {
-    console.error('Error editing post:', error);
-  }
-};
+  const handleEditPost = async (postId, updatedTitle, updatedContent) => {
+    try {
+      const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: updatedTitle, content: updatedContent, user_id: user.id }),
+      });
+      const data = await response.json();
+      console.log('Updated post:', data);
+      // Update posts state with the edited post
+      const updatedPosts = posts.map(post => (post.id === postId ? { ...post, title: updatedTitle, content: updatedContent } : post));
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.error('Error editing post:', error);
+    }
+  };
 
-// Function to handle deleting a post
-const handleDeletePost = async (postId) => {
-  try {
-    const response = await fetch(`http://localhost:8080/posts/${postId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ user_id: user.id }),
-    });
-    const data = await response.json();
-    console.log('Deleted post:', data);
-    // Remove the deleted post from the posts state
-    const updatedPosts = posts.filter(post => post.id !== postId);
-    setPosts(updatedPosts);
-  } catch (error) {
-    console.error('Error deleting post:', error);
-  }
-};
+  const handleDeletePost = async (postId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user_id: user.id }),
+      });
+      const data = await response.json();
+      console.log('Deleted post:', data);
+      // Remove the deleted post from the posts state
+      const updatedPosts = posts.filter(post => post.id !== postId);
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
 
   return (
-    <div className='App'>
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100">
       {!isLoggedIn ? (
-        <div>
-          <h2>Login</h2>
+        <div className="bg-white p-8 rounded shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Login</h2>
           <input
             type="text"
             placeholder="Enter your username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            className="border border-gray-300 rounded px-4 py-2 mb-4 w-full"
           />
-          <button onClick={handleLogin}>Login</button>
+          <button onClick={handleLogin} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Login
+          </button>
         </div>
       ) : (
-        <div>
-          <h2>Create Post</h2>
+        <div className="bg-white p-8 rounded shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Create Post</h2>
           <input
             type="text"
             placeholder="Enter post title"
             value={newPostTitle}
             onChange={(e) => setNewPostTitle(e.target.value)}
+            className="border border-gray-300 rounded px-4 py-2 mb-4 w-full"
           />
           <textarea
             placeholder="Enter post content"
             value={newPostContent}
             onChange={(e) => setNewPostContent(e.target.value)}
+            className="border border-gray-300 rounded px-4 py-2 mb-4 w-full"
           ></textarea>
-          <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border border-gray-300 rounded px-4 py-2 mb-4 w-full"
+          >
             <option value="">Select a category</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
@@ -203,26 +210,36 @@ const handleDeletePost = async (postId) => {
               </option>
             ))}
           </select>
-          <button onClick={handleAddPost}>Add Post</button>
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleAddPost} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Add Post
+          </button>
+          <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">
+            Logout
+          </button>
         </div>
       )}
-      <h2>All Posts</h2>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <h5>{post.title}</h5>
-            <p>{post.content}</p>
-            <p>Posted by: {post.username}</p>
-            {post.user_id === user.id && (
-              <div>
-                <button onClick={() => handleEditPost(post.id, 'Updated Content')}>Edit</button>
-                <button onClick={() => handleDeletePost(post.id)}>Delete</button>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div className="bg-white p-8 rounded shadow-md mt-8 w-full">
+        <h2 className="text-2xl font-bold mb-4">All Posts</h2>
+        <ul>
+          {posts.map((post) => (
+            <li key={post.id} className="border-b border-gray-300 py-4">
+              <h5 className="text-lg font-semibold mb-2">{post.title}</h5>
+              <p className="text-gray-700 mb-2">{post.content}</p>
+              <p className="text-gray-500">Posted by: {post.username}</p>
+              {post.user_id === user.id && (
+                <div>
+                  <button onClick={() => handleEditPost(post.id, 'Updated Content')} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Edit
+                  </button>
+                  <button onClick={() => handleDeletePost(post.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">
+                    Delete
+                  </button>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
