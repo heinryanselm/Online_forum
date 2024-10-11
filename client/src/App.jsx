@@ -23,7 +23,7 @@ function App() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:8080/categories');
+      const response = await fetch('https://online-forum-4g3z.onrender.com/categories');
       const data = await response.json();
       setCategories(data); // Set categories directly from the response data
     } catch (error) {
@@ -39,12 +39,12 @@ function App() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:8080/posts');
+      const response = await fetch('https://online-forum-4g3z.onrender.com/posts');
       const postData = await response.json();
 
       const postsWithUsernames = await Promise.all(
         postData.map(async (post) => {
-          const userResponse = await fetch(`http://localhost:8080/user/${post.user_id}`);
+          const userResponse = await fetch(`https://online-forum-4g3z.onrender.com/user/${post.user_id}`);
           const userData = await userResponse.json();
           return { ...post, username: userData.username };
         })
@@ -60,7 +60,7 @@ function App() {
     console.log('Logging in...');
     try {
       //Making login request to the server
-      const response = await fetch('http://localhost:8080/login', {
+      const response = await fetch('https://online-forum-4g3z.onrender.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ function App() {
   // eslint-disable-next-line no-unused-vars
   const handleAddCategory = async () => {
     try {
-      const response = await fetch('http://localhost:8080/categories', {
+      const response = await fetch('https://online-forum-4g3z.onrender.com/categories', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ function App() {
 
   const handleAddPost = async () => {
     try {
-      const response = await fetch('http://localhost:8080/posts', {
+      const response = await fetch('https://online-forum-4g3z.onrender.com/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ function App() {
 
   const handleEditPost = async (postId, updatedTitle, updatedContent) => {
     try {
-      const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+      const response = await fetch(`https://online-forum-4g3z.onrender.com/posts/${postId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ function App() {
 
   const handleDeletePost = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+      const response = await fetch(`https://online-forum-4g3z.onrender.com/posts/${postId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
